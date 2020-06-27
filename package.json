@@ -1,0 +1,56 @@
+{
+	"name": "pacer",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/apaleslimghost/pacer.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/apaleslimghost/pacer/issues"
+	},
+	"homepage": "https://github.com/apaleslimghost/pacer#readme",
+	"devDependencies": {
+		"@financial-times/athloi": "^1.0.0",
+		"@quarterto/eslint-config": "^1.9.0",
+		"@quarterto/prettier": "^1.1.0",
+		"eslint": "^6.8.0",
+		"husky": "^2.3.0",
+		"jest": "^26.1.0",
+		"lint-staged": "^10.0.0",
+		"prettier": "^2.0.0"
+	},
+	"eslintConfig": {
+		"extends": [
+			"@quarterto"
+		],
+		"overrides": [
+			{
+				"files": [
+					"*.spec.js"
+				],
+				"env": {
+					"jest": true
+				}
+			}
+		]
+	},
+	"prettier": "@quarterto/prettier",
+	"lint-staged": {
+		"*.{js,jsx,json,ts,tsx,coffee}": [
+			"prettier --write"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	}
+}
