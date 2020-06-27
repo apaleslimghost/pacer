@@ -1,3 +1,4 @@
+const createEffect = require('@pacer/effect')
 const { send, status } = require('./effects')
 
 function defaultHandleError(error) {
@@ -8,10 +9,11 @@ function defaultHandleError(error) {
 	}
 }
 
-module.exports = function createServer(
-	runEffect,
+module.exports = function createHandler(
+	effectful,
 	{ handleBody = send, handleError = defaultHandleError } = {},
 ) {
+	const runEffect = createEffect(effectful)
 	return async function handler(request, response) {
 		try {
 			const body = await runEffect(request, response)
