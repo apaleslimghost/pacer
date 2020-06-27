@@ -46,4 +46,15 @@ describe('@pacer/router', () => {
 
 		expect(handler).toBeCalledWith({ greeting: 'world' })
 	})
+
+	test('all together now', () => {
+		const handler = jest.fn()
+		const route = router({
+			'hello/:greeting': handler,
+		})
+
+		route('/hello/world/and/everyone')
+
+		expect(handler).toBeCalledWith({ greeting: 'world' }, 'and', 'everyone')
+	})
 })
