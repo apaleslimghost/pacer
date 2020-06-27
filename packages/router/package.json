@@ -1,0 +1,12 @@
+{
+	"name": "@pacer/router",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "test() { cd ../.. ; npx jest --projects packages/router $@ ; } ; test"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}
