@@ -26,3 +26,5 @@ module.exports = function createHandler(
 		}
 	}
 }
+
+Object.assign(module.exports, require('../effects'))
