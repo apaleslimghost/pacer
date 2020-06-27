@@ -21,7 +21,7 @@ function* effectful() {
 
 const runEffect = createEffect(effectful)
 
-runEffect({ context: [{ some: 'argument' }] }) // logs "test effect { some: 'argument' }"
+runEffect({ some: 'argument' }) // logs "test effect { some: 'argument' }"
 ```
 
 ## api
@@ -30,6 +30,6 @@ runEffect({ context: [{ some: 'argument' }] }) // logs "test effect { some: 'arg
 
 wraps the (async) generator function in a function that runs it with effects
 
-### `runEffect({ args, context })`
+### `runEffect(context)`
 
-runs an effectful function. the function is called with `args`, and the effects it yields are called with `context`. because the effectful function can be `async`, `runEffect` always returns a Promise. if the function returns a value, that's what the Promise resolves to. 
+runs an effectful function. the effects it yields are called with `context`. because the effectful function can be `async`, `runEffect` always returns a Promise. if the function returns a value, that's what the Promise resolves to. 
