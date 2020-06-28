@@ -1,89 +1,100 @@
 const router = require('./')
 
 describe('@pacer/router', () => {
-	test('calls a nested function by path', () => {
-		const handler = jest.fn()
-		const route = router({
-			path: { to: { handler } },
-		})
+    test('calls a nested function by path', () => {
+        const handler = jest.fn()
+        const route = router({
+            path: { to: { handler } },
+        })
 
-		route('/path/to/handler')
+        route('/path/to/handler')
 
-		expect(handler).toBeCalled()
-	})
+        expect(handler).toBeCalled()
+    })
 
-	test('calls function with leftover path components', () => {
-		const handler = jest.fn()
-		const route = router({
-			path: { to: { handler } },
-		})
+    test('routes to index without chomping path', () => {
+        const handler = jest.fn()
+        const route = router({
+            path: { index: { to: { handler } } },
+        })
 
-		route('/path/to/handler/with/extra/stuff')
+        route('/path/to/handler')
 
-		expect(handler).toBeCalledWith('with', 'extra', 'stuff')
-	})
+        expect(handler).toBeCalled()
+    })
 
-	test('handles slashes in route keys', () => {
-		const handler = jest.fn()
-		const route = router({
-			'path/to': { handler },
-		})
+    test('calls function with leftover path components', () => {
+        const handler = jest.fn()
+        const route = router({
+            path: { to: { handler } },
+        })
 
-		route('/path/to/handler')
+        route('/path/to/handler/with/extra/stuff')
 
-		expect(handler).toBeCalled()
-	})
+        expect(handler).toBeCalledWith('with', 'extra', 'stuff')
+    })
 
-	test('collects variables and provides an object', () => {
-		const handler = jest.fn()
-		const route = router({
-			hello: {
-				':greeting': handler,
-			},
-		})
+    test('handles slashes in route keys', () => {
+        const handler = jest.fn()
+        const route = router({
+            'path/to': { handler },
+        })
 
-		route('/hello/world')
+        route('/path/to/handler')
 
-		expect(handler).toBeCalledWith({ greeting: 'world' })
-	})
+        expect(handler).toBeCalled()
+    })
 
-	test('handles param keys at multiple levels', () => {
-		const handler = jest.fn()
-		const route = router({
-			hello: {
-				':greeting': { and: { ':others': handler } },
-			},
-		})
+    test('collects variables and provides an object', () => {
+        const handler = jest.fn()
+        const route = router({
+            hello: {
+                ':greeting': handler,
+            },
+        })
 
-		route('/hello/world/and/everyone')
+        route('/hello/world')
 
-		expect(handler).toBeCalledWith({ greeting: 'world', others: 'everyone' })
-	})
+        expect(handler).toBeCalledWith({ greeting: 'world' })
+    })
 
-	test('picks the route that matches requiring the least parameters', () => {
-		const handler1 = jest.fn()
-		const handler2 = jest.fn()
-		const route = router({
-			hello: {
-				':greeting': { and: { ':others': handler1 } },
-				':otherGreeting': { and: { everyone: handler2 } },
-			},
-		})
+    test('handles param keys at multiple levels', () => {
+        const handler = jest.fn()
+        const route = router({
+            hello: {
+                ':greeting': { and: { ':others': handler } },
+            },
+        })
 
-		route('/hello/world/and/everyone')
+        route('/hello/world/and/everyone')
 
-		expect(handler1).not.toBeCalled()
-		expect(handler2).toBeCalledWith({ otherGreeting: 'world' })
-	})
+        expect(handler).toBeCalledWith({ greeting: 'world', others: 'everyone' })
+    })
 
-	test('all together now', () => {
-		const handler = jest.fn()
-		const route = router({
-			'hello/:greeting': handler,
-		})
+    test('picks the route that matches requiring the least parameters', () => {
+        const handler1 = jest.fn()
+        const handler2 = jest.fn()
+        const route = router({
+            hello: {
+                ':greeting': { and: { ':others': handler1 } },
+                ':otherGreeting': { and: { everyone: handler2 } },
+            },
+        })
 
-		route('/hello/world/and/everyone')
+        route('/hello/world/and/everyone')
 
-		expect(handler).toBeCalledWith({ greeting: 'world' }, 'and', 'everyone')
-	})
+        expect(handler1).not.toBeCalled()
+        expect(handler2).toBeCalledWith({ otherGreeting: 'world' })
+    })
+
+    test('all together now', () => {
+        const handler = jest.fn()
+        const route = router({
+            'hello/:greeting': { index: handler },
+        })
+
+        route('/hello/world/and/everyone')
+
+        expect(handler).toBeCalledWith({ greeting: 'world' }, 'and', 'everyone')
+    })
 })

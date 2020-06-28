@@ -5,6 +5,7 @@
 - [x] [http effects](packages/http)
 - [x] [router](packages/router)
 - [ ] integrate router & http (which package?)
+- [ ] http methods
 - [ ] static files controller
 - [ ] models & schemas
 - [ ] model resource routes

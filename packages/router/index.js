@@ -10,6 +10,10 @@ function* lookup(tree, path, values = {}) {
 			yield* lookup(tree[component], rest, values)
 		}
 
+		if (tree.index) {
+			yield* lookup(tree.index, path, values)
+		}
+
 		if (tree[holes]) {
 			for (const hole of tree[holes]) {
 				yield* lookup(hole.subtree, rest, {...values, [hole.name]: component})
