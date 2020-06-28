@@ -60,6 +60,22 @@ describe('@pacer/router', () => {
 		expect(handler).toBeCalledWith({ greeting: 'world', others: 'everyone' })
 	})
 
+	test('picks the route that matches requiring the least parameters', () => {
+		const handler1 = jest.fn()
+		const handler2 = jest.fn()
+		const route = router({
+			hello: {
+				':greeting': { and: { ':others': handler1 } },
+				':otherGreeting': { and: { everyone: handler2 } },
+			},
+		})
+
+		route('/hello/world/and/everyone')
+
+		expect(handler1).not.toBeCalled()
+		expect(handler2).toBeCalledWith({ otherGreeting: 'world' })
+	})
+
 	test('all together now', () => {
 		const handler = jest.fn()
 		const route = router({

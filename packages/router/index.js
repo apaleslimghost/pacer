@@ -56,10 +56,15 @@ function buildRouteTree(routes, path = [], tree = {}) {
 	return tree
 }
 
+const rankCandidate = ({ values, remaining }) =>
+	Object.keys(values).length + remaining.length
+
 module.exports = (routes) => {
 	const tree = buildRouteTree(routes)
 	return (path) => {
-		const candidates = Array.from(lookup(tree, pathToComponents(path)))
+		const candidates = Array.from(lookup(tree, pathToComponents(path))).sort(
+			(a, b) => rankCandidate(a) - rankCandidate(b),
+		)
 
 		if (candidates.length > 0) {
 			const { result, values, remaining } = candidates[0]
