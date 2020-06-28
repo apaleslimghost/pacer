@@ -12,22 +12,17 @@ function lookup(tree, [component, ...rest]) {
 	return lookup(tree[component], rest)
 }
 
-function buildRouteTree(routes) {
-	const tree = {}
+function buildRouteTree(routes, path = [], tree = {}) {
+	for (const [key, subtree] of Object.entries(routes)) {
+		const newPath = [...path, ...pathToComponents(key)]
 
-	function traverseRoutes(routes, path = []) {
-		for (const [key, subtree] of Object.entries(routes)) {
-			const newPath = [...path, ...pathToComponents(key)]
-
-			if (typeof subtree === 'object') {
-				traverseRoutes(subtree, newPath)
-			} else {
-				deepSet(tree, newPath, subtree)
-			}
+		if (typeof subtree === 'object') {
+			buildRouteTree(subtree, newPath, tree)
+		} else {
+			deepSet(tree, newPath, subtree)
 		}
 	}
 
-	traverseRoutes(routes)
 	return tree
 }
 
