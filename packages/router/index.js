@@ -4,17 +4,17 @@ const hole = Symbol('hole')
 
 const pathToComponents = (path) => path.split('/').filter(Boolean)
 
-function lookup(tree, path) {
+function* lookup(tree, path, values = {}) {
 	if (typeof tree === 'object') {
 		const [component, ...rest] = path
 
 		if (Object.prototype.hasOwnProperty.call(tree, component)) {
-			return lookup(tree[component], rest)
+			yield* lookup(tree[component], rest)
 		}
 	}
 
 	if (typeof tree === 'function') {
-		return tree(...path)
+		yield { result: tree, values, remaining: path }
 	}
 }
 
@@ -34,5 +34,14 @@ function buildRouteTree(routes, path = [], tree = {}) {
 
 module.exports = (routes) => {
 	const tree = buildRouteTree(routes)
-	return (path) => lookup(tree, pathToComponents(path))
+	return (path) => {
+		const candidates = Array.from(lookup(tree, pathToComponents(path)))
+
+		if (candidates.length > 0) {
+			const { result, values, remaining } = candidates[0]
+			return Object.keys(values).length > 0
+				? result(values, ...remaining)
+				: result(...remaining)
+		}
+	}
 }
