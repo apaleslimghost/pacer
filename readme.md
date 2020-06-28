@@ -1,4 +1,4 @@
-# ![pacer.js](etc/logo.svg)
+<h1 align="center"><img alt="pacer.js" src="etc/logo.svg"></h1>
 
 ## server
 - [x] [effects system](packages/effect)
