@@ -12,13 +12,13 @@ function* lookup(tree, path, values = {}) {
 
 		if (tree[holes]) {
 			for (const hole of tree[holes]) {
-				yield* lookup(hole.subtree, rest, { ...values, [hole.name]: component })
+				yield* lookup(hole.subtree, rest, {...values, [hole.name]: component})
 			}
 		}
 	}
 
 	if (typeof tree === 'function') {
-		yield { result: tree, values, remaining: path }
+		yield {result: tree, values, remaining: path}
 	}
 }
 
@@ -28,7 +28,7 @@ function updateTree(obj, [key, ...rest], value) {
 			obj[holes] = []
 		}
 
-		const hole = { name: key.slice(1) }
+		const hole = {name: key.slice(1)}
 		obj[holes].push(hole)
 		updateTree(hole, ['subtree', ...rest], value)
 	} else if (rest.length === 0) {
@@ -56,7 +56,7 @@ function buildRouteTree(routes, path = [], tree = {}) {
 	return tree
 }
 
-const rankCandidate = ({ values, remaining }) =>
+const rankCandidate = ({values, remaining}) =>
 	Object.keys(values).length + remaining.length
 
 module.exports = (routes) => {
@@ -67,7 +67,7 @@ module.exports = (routes) => {
 		)
 
 		if (candidates.length > 0) {
-			const { result, values, remaining } = candidates[0]
+			const {result, values, remaining} = candidates[0]
 			return Object.keys(values).length > 0
 				? result(values, ...remaining)
 				: result(...remaining)
