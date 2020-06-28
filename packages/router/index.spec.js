@@ -47,6 +47,19 @@ describe('@pacer/router', () => {
 		expect(handler).toBeCalledWith({ greeting: 'world' })
 	})
 
+	test('handles param keys at multiple levels', () => {
+		const handler = jest.fn()
+		const route = router({
+			hello: {
+				':greeting': { and: { ':others': handler } },
+			},
+		})
+
+		route('/hello/world/and/everyone')
+
+		expect(handler).toBeCalledWith({ greeting: 'world', others: 'everyone' })
+	})
+
 	test('all together now', () => {
 		const handler = jest.fn()
 		const route = router({
