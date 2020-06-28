@@ -9,7 +9,5 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"dependencies": {
-		"dset": "^2.0.1"
-	}
+	"dependencies": {}
 }
