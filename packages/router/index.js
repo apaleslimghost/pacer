@@ -4,12 +4,18 @@ const hole = Symbol('hole')
 
 const pathToComponents = (path) => path.split('/').filter(Boolean)
 
-function lookup(tree, [component, ...rest]) {
-	if (typeof tree === 'function') {
-		return tree(component, ...rest)
+function lookup(tree, path) {
+	if (typeof tree === 'object') {
+		const [component, ...rest] = path
+
+		if (Object.prototype.hasOwnProperty.call(tree, component)) {
+			return lookup(tree[component], rest)
+		}
 	}
 
-	return lookup(tree[component], rest)
+	if (typeof tree === 'function') {
+		return tree(...path)
+	}
 }
 
 function buildRouteTree(routes, path = [], tree = {}) {
